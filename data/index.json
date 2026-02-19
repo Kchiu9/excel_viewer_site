@@ -1,0 +1,103 @@
+{
+  "last_updated": "2026-02-19 20:30:52",
+  "workbook": "C:\\Users\\Thinkpad\\OneDrive\\0-Concordia_Capital\\excel_to_https\\excel_web_refresh\\agent\\Miners_Comps_Screener_Web.xlsx",
+  "sheet_count": 16,
+  "sheets": [
+    {
+      "sheet": "Golds",
+      "file": "sheets/Golds.csv",
+      "rows": 72,
+      "cols": 77
+    },
+    {
+      "sheet": "Golds Colour",
+      "file": "sheets/Golds Colour.csv",
+      "rows": 65,
+      "cols": 7
+    },
+    {
+      "sheet": "Copper",
+      "file": "sheets/Copper.csv",
+      "rows": 46,
+      "cols": 78
+    },
+    {
+      "sheet": "Copper Colour",
+      "file": "sheets/Copper Colour.csv",
+      "rows": 22,
+      "cols": 8
+    },
+    {
+      "sheet": "Silver",
+      "file": "sheets/Silver.csv",
+      "rows": 18,
+      "cols": 78
+    },
+    {
+      "sheet": "Silver Colour",
+      "file": "sheets/Silver Colour.csv",
+      "rows": 14,
+      "cols": 6
+    },
+    {
+      "sheet": "Diversifieds",
+      "file": "sheets/Diversifieds.csv",
+      "rows": 11,
+      "cols": 47
+    },
+    {
+      "sheet": "Diversifieds Colour",
+      "file": "sheets/Diversifieds Colour.csv",
+      "rows": 8,
+      "cols": 5
+    },
+    {
+      "sheet": "PGMs",
+      "file": "sheets/PGMs.csv",
+      "rows": 19,
+      "cols": 42
+    },
+    {
+      "sheet": "Iron Ore",
+      "file": "sheets/Iron Ore.csv",
+      "rows": 12,
+      "cols": 44
+    },
+    {
+      "sheet": "Uranium",
+      "file": "sheets/Uranium.csv",
+      "rows": 30,
+      "cols": 37
+    },
+    {
+      "sheet": "Lithium",
+      "file": "sheets/Lithium.csv",
+      "rows": 22,
+      "cols": 42
+    },
+    {
+      "sheet": "Other",
+      "file": "sheets/Other.csv",
+      "rows": 34,
+      "cols": 32
+    },
+    {
+      "sheet": "Coal",
+      "file": "sheets/Coal.csv",
+      "rows": 25,
+      "cols": 52
+    },
+    {
+      "sheet": "O&G",
+      "file": "sheets/O&G.csv",
+      "rows": 44,
+      "cols": 29
+    },
+    {
+      "sheet": "Aluminium",
+      "file": "sheets/Aluminium.csv",
+      "rows": 14,
+      "cols": 28
+    }
+  ]
+}
