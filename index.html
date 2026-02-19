@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Excel Viewer</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    button { padding: 8px 12px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 12px; }
+    th, td { border: 1px solid #ddd; padding: 6px; font-size: 12px; }
+    th { background: #f5f5f5; position: sticky; top: 0; }
+    #status { margin-left: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Excel Viewer</h2>
+
+  <button id="refreshBtn">Refresh (trigger Excel on my PC)</button>
+  <span id="status"></span>
+
+  <div style="margin-top:10px;">
+    <b>Last updated:</b> <span id="lastUpdated">-</span>
+  </div>
+
+  <table id="tbl"></table>
+
+<script>
+  const REFRESH_API_URL = "https://REPLACE_ME/refresh";
+
+  async function loadLastUpdated() {
+    try {
+      const r = await fetch("data/last_updated.json", { cache: "no-store" });
+      const j = await r.json();
+      document.getElementById("lastUpdated").innerText = j.last_updated || "-";
+    } catch {
+      document.getElementById("lastUpdated").innerText = "-";
+    }
+  }
+
+  function parseCSV(text) {
+    return text.trim().split(/\r?\n/).map(line => line.split(","));
+  }
+
+  async function loadTable() {
+    const r = await fetch("data/data.csv", { cache: "no-store" });
+    const csv = await r.text();
+    const rows = parseCSV(csv);
+
+    const tbl = document.getElementById("tbl");
+    tbl.innerHTML = "";
+
+    if (rows.length === 0) return;
+
+    const thead = document.createElement("thead");
+    const hr = document.createElement("tr");
+    rows[0].forEach(h => {
+      const th = document.createElement("th");
+      th.textContent = h;
+      hr.appendChild(th);
+    });
+    thead.appendChild(hr);
+    tbl.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    rows.slice(1).forEach(r => {
+      const tr = document.createElement("tr");
+      r.forEach(c => {
+        const td = document.createElement("td");
+        td.textContent = c;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody);
+  }
+
+  async function triggerRefresh() {
+    const status = document.getElementById("status");
+    status.innerText = "Triggering refresh...";
+    try {
+      const r = await fetch(REFRESH_API_URL, { method: "POST" });
+      if (!r.ok) throw new Error("Failed");
+      status.innerText = "Refresh triggered.";
+
+      setTimeout(async () => {
+        await loadLastUpdated();
+        await loadTable();
+        status.innerText = "Updated.";
+      }, 8000);
+    } catch (e) {
+      status.innerText = "Error triggering refresh.";
+    }
+  }
+
+  document.getElementById("refreshBtn").onclick = triggerRefresh;
+
+  loadLastUpdated();
+  loadTable();
+</script>
+</body>
+</html>
