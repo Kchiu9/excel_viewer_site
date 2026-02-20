@@ -1,9 +1,12 @@
 <!doctype html>
 <html>
 <head>
-  <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.20.3/dist/xlsx.full.min.js"></script>
   <meta charset="utf-8"/>
   <title>Miners Excel Viewer</title>
+
+  <!-- SheetJS (local). Make sure this file exists in your repo at: assets/xlsx.full.min.js -->
+  <script defer src="assets/xlsx.full.min.js"></script>
+
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -14,8 +17,6 @@
     #status { margin-left: 10px; }
     .muted { color: #666; font-size: 12px; }
   </style>
-
-
 </head>
 
 <body>
@@ -38,199 +39,207 @@
 
   <table id="tbl"></table>
 
-<script>
-  // Optional: set to your tunnel endpoint, e.g. https://refresh.example.com/refresh
-  const REFRESH_API_URL = "";
+  <script>
+    // Optional: set to your tunnel endpoint, e.g. https://refresh.example.com/refresh
+    // If you don't use it yet, leave empty string "" and the button will be hidden.
+    const REFRESH_API_URL = "";
 
-  const INDEX_URL = "data/index.json";
+    const INDEX_URL = "data/index.json";
 
-  function setStatus(msg) {
-    document.getElementById("status").innerText = msg || "";
-  }
+    function setStatus(msg) {
+      document.getElementById("status").innerText = msg || "";
+    }
 
-  function escapeHtml(s) {
-    return String(s ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
+    // Hard check: if this triggers, assets/xlsx.full.min.js didn't load
+    if (typeof XLSX === "undefined") {
+      setStatus("Error: SheetJS failed to load (XLSX undefined). Check assets/xlsx.full.min.js path.");
+      throw new Error("XLSX is not defined");
+    }
 
-  function renderTable(rows) {
-    const tbl = document.getElementById("tbl");
-    tbl.innerHTML = "";
+    function escapeHtml(s) {
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-    if (!rows || rows.length === 0) return;
+    function renderTable(rows) {
+      const tbl = document.getElementById("tbl");
+      tbl.innerHTML = "";
 
-    const thead = document.createElement("thead");
-    const hr = document.createElement("tr");
-    (rows[0] || []).forEach(h => {
-      const th = document.createElement("th");
-      th.innerHTML = escapeHtml(h);
-      hr.appendChild(th);
-    });
-    thead.appendChild(hr);
-    tbl.appendChild(thead);
+      if (!rows || rows.length === 0) return;
 
-    const tbody = document.createElement("tbody");
-    rows.slice(1).forEach(r => {
-      const tr = document.createElement("tr");
-      (r || []).forEach(c => {
-        const td = document.createElement("td");
-        td.innerHTML = escapeHtml(c);
-        tr.appendChild(td);
+      const thead = document.createElement("thead");
+      const hr = document.createElement("tr");
+      (rows[0] || []).forEach(h => {
+        const th = document.createElement("th");
+        th.innerHTML = escapeHtml(h);
+        hr.appendChild(th);
       });
-      tbody.appendChild(tr);
-    });
-    tbl.appendChild(tbody);
-  }
+      thead.appendChild(hr);
+      tbl.appendChild(thead);
 
-  async function fetchJson(url) {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
-    return await r.json();
-  }
+      const tbody = document.createElement("tbody");
+      rows.slice(1).forEach(r => {
+        const tr = document.createElement("tr");
+        (r || []).forEach(c => {
+          const td = document.createElement("td");
+          td.innerHTML = escapeHtml(c);
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      tbl.appendChild(tbody);
+    }
 
-  async function fetchText(url) {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
-    return await r.text();
-  }
+    async function fetchJson(url) {
+      const r = await fetch(url, { cache: "no-store" });
+      if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
+      return await r.json();
+    }
 
-  async function fetchArrayBuffer(url) {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
-    return await r.arrayBuffer();
-  }
+    async function fetchText(url) {
+      const r = await fetch(url, { cache: "no-store" });
+      if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
+      return await r.text();
+    }
 
-  function parseCSV(text) {
-    // Simple CSV parser (no quoted commas). Keep for backward compatibility.
-    const lines = text.trim().split(/\r?\n/);
-    return lines.map(line => line.split(","));
-  }
+    async function fetchArrayBuffer(url) {
+      const r = await fetch(url, { cache: "no-store" });
+      if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
+      return await r.arrayBuffer();
+    }
 
-  async function parseXLSX(url) {
-    const ab = await fetchArrayBuffer(url);
-    const wb = XLSX.read(ab, { type: "array" });
+    function parseCSV(text) {
+      // Simple CSV parser (no quoted commas).
+      const lines = text.trim().split(/\r?\n/);
+      return lines.map(line => line.split(","));
+    }
 
-    // Each exported file is a single-sheet workbook, but we handle multi-sheet anyway.
-    const sheetName = wb.SheetNames[0];
-    const ws = wb.Sheets[sheetName];
+    async function parseXLSX(url) {
+      const ab = await fetchArrayBuffer(url);
+      const wb = XLSX.read(ab, { type: "array" });
 
-    // Convert to 2D array; raw:false makes it render formatted text (dates, % etc.) more nicely
-    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false });
+      // each exported file is a single-sheet workbook; still safe for multi-sheet
+      const sheetName = wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
 
-    // Normalize: ensure every row has same column count (so table doesn't misalign)
-    const maxCols = rows.reduce((m, r) => Math.max(m, (r || []).length), 0);
-    const normalized = rows.map(r => {
-      const row = (r || []).map(v => v == null ? "" : String(v));
-      while (row.length < maxCols) row.push("");
-      return row;
-    });
+      // 2D array
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false });
 
-    return normalized;
-  }
+      // normalize width
+      const maxCols = rows.reduce((m, r) => Math.max(m, (r || []).length), 0);
+      return rows.map(r => {
+        const row = (r || []).map(v => (v == null ? "" : String(v)));
+        while (row.length < maxCols) row.push("");
+        return row;
+      });
+    }
 
-  async function loadIndexAndPopulateSheets() {
-    setStatus("Loading index...");
-    const index = await fetchJson(INDEX_URL);
+    async function loadIndexAndPopulateSheets() {
+      setStatus("Loading index...");
+      const index = await fetchJson(INDEX_URL);
 
-    document.getElementById("lastUpdated").innerText = index.last_updated || "-";
-    const meta = [];
-    if (typeof index.sheet_count === "number") meta.push(`${index.sheet_count} sheets`);
-    if (index.workbook) meta.push(`source: ${index.workbook}`);
-    document.getElementById("meta").innerText = meta.length ? `(${meta.join(" · ")})` : "";
+      document.getElementById("lastUpdated").innerText = index.last_updated || "-";
+      const meta = [];
+      if (typeof index.sheet_count === "number") meta.push(`${index.sheet_count} sheets`);
+      if (index.workbook) meta.push(`source: ${index.workbook}`);
+      document.getElementById("meta").innerText = meta.length ? `(${meta.join(" · ")})` : "";
 
-    const sheets = index.sheets || [];
-    const select = document.getElementById("sheetSelect");
-    select.innerHTML = "";
+      const sheets = index.sheets || [];
+      const select = document.getElementById("sheetSelect");
+      select.innerHTML = "";
 
-    if (!sheets.length) {
-      const opt = document.createElement("option");
-      opt.value = "";
-      opt.textContent = "(No sheets found)";
-      select.appendChild(opt);
-      setStatus("No sheets exported.");
+      if (!sheets.length) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "(No sheets found)";
+        select.appendChild(opt);
+        setStatus("No sheets exported.");
+        return { index, sheets };
+      }
+
+      for (const s of sheets) {
+        const opt = document.createElement("option");
+        opt.value = s.file; // e.g. sheets/Golds.xlsx
+        const labelParts = [s.sheet];
+        if (typeof s.rows === "number" && typeof s.cols === "number") {
+          labelParts.push(`(${s.rows}x${s.cols})`);
+        }
+        opt.textContent = labelParts.join(" ");
+        select.appendChild(opt);
+      }
+
+      setStatus("");
       return { index, sheets };
     }
 
-    // Populate dropdown
-    for (const s of sheets) {
-      const opt = document.createElement("option");
-      opt.value = s.file; // e.g. sheets/Golds.xlsx  (or legacy sheets/Golds.csv)
-      const labelParts = [s.sheet];
-      if (typeof s.rows === "number" && typeof s.cols === "number") {
-        labelParts.push(`(${s.rows}x${s.cols})`);
+    async function loadSelectedSheet() {
+      const select = document.getElementById("sheetSelect");
+      let file = select.value; // e.g. sheets/Golds.xlsx (should be xlsx after your index.json patch)
+      if (!file) return;
+
+      setStatus("Loading sheet...");
+      const url = "data/" + file;
+
+      try {
+        let rows;
+        if (file.toLowerCase().endsWith(".xlsx") || file.toLowerCase().endsWith(".xls")) {
+          rows = await parseXLSX(url);
+        } else {
+          // legacy CSV fallback if needed
+          const csvText = await fetchText(url);
+          rows = parseCSV(csvText);
+        }
+        renderTable(rows);
+        setStatus("Loaded.");
+      } catch (e) {
+        setStatus("Error: " + (e.message || e));
       }
-      opt.textContent = labelParts.join(" ");
-      select.appendChild(opt);
     }
 
-    setStatus("");
-    return { index, sheets };
-  }
+    async function reloadAll() {
+      try {
+        const { sheets } = await loadIndexAndPopulateSheets();
+        if (sheets && sheets.length) {
+          await loadSelectedSheet();
+        }
+      } catch (e) {
+        setStatus("Error: " + (e.message || e));
+      }
+    }
 
-  async function loadSelectedSheet() {
-    const select = document.getElementById("sheetSelect");
-    const file = select.value; // e.g. sheets/Golds.xlsx
-    if (!file) return;
+    async function triggerRefresh() {
+      if (!REFRESH_API_URL) return;
+      setStatus("Triggering refresh...");
+      try {
+        const r = await fetch(REFRESH_API_URL, { method: "POST" });
+        if (!r.ok) throw new Error("Refresh failed: " + r.status);
+        setStatus("Refresh triggered. Waiting then reloading...");
 
-    setStatus("Loading sheet...");
+        setTimeout(async () => {
+          await reloadAll();
+        }, 8000);
+      } catch (e) {
+        setStatus("Error: " + (e.message || e));
+      }
+    }
 
-    const url = "data/" + file;
+    // Wire up UI
+    document.getElementById("sheetSelect").addEventListener("change", loadSelectedSheet);
+    document.getElementById("reloadBtn").addEventListener("click", reloadAll);
 
-    let rows;
-    if (file.toLowerCase().endsWith(".xlsx") || file.toLowerCase().endsWith(".xls")) {
-      rows = await parseXLSX(url);
+    const refreshBtn = document.getElementById("refreshBtn");
+    if (!REFRESH_API_URL) {
+      refreshBtn.style.display = "none";
     } else {
-      // legacy CSV path
-      const csvText = await fetchText(url);
-      rows = parseCSV(csvText);
+      refreshBtn.addEventListener("click", triggerRefresh);
     }
 
-    renderTable(rows);
-    setStatus("Loaded.");
-  }
-
-  async function reloadAll() {
-    try {
-      const { sheets } = await loadIndexAndPopulateSheets();
-      if (sheets && sheets.length) {
-        await loadSelectedSheet();
-      }
-    } catch (e) {
-      setStatus("Error: " + (e.message || e));
-    }
-  }
-
-  async function triggerRefresh() {
-    if (!REFRESH_API_URL) return;
-    setStatus("Triggering refresh...");
-    try {
-      const r = await fetch(REFRESH_API_URL, { method: "POST" });
-      if (!r.ok) throw new Error("Refresh failed: " + r.status);
-      setStatus("Refresh triggered. Waiting then reloading...");
-
-      setTimeout(async () => {
-        await reloadAll();
-      }, 8000);
-    } catch (e) {
-      setStatus("Error: " + (e.message || e));
-    }
-  }
-
-  document.getElementById("sheetSelect").addEventListener("change", loadSelectedSheet);
-  document.getElementById("reloadBtn").addEventListener("click", reloadAll);
-
-  const refreshBtn = document.getElementById("refreshBtn");
-  if (!REFRESH_API_URL) {
-    refreshBtn.style.display = "none";
-  } else {
-    refreshBtn.addEventListener("click", triggerRefresh);
-  }
-
-  reloadAll();
-</script>
+    // Initial load
+    reloadAll();
+  </script>
 </body>
 </html>
