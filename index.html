@@ -2,244 +2,128 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>Miners Excel Viewer</title>
-
-  <!-- SheetJS (local). Make sure this file exists in your repo at: assets/xlsx.full.min.js -->
-  <script defer src="./assets/xlsx.full.min.js"></script>
-
+  <title>Miners Excel Viewer (HTML)</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
     .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     button, select { padding: 8px 12px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 12px; }
-    th, td { border: 1px solid #ddd; padding: 6px; font-size: 12px; }
-    th { background: #f5f5f5; position: sticky; top: 0; }
     #status { margin-left: 10px; }
     .muted { color: #666; font-size: 12px; }
+    iframe { width: 100%; height: 78vh; border: 1px solid #ddd; margin-top: 12px; }
+    code { background: #f5f5f5; padding: 2px 4px; border-radius: 4px; }
   </style>
 </head>
-
 <body>
-  <h2>Excel Viewer</h2>
+  <h2>Excel Viewer (HTML export)</h2>
 
   <div class="row">
     <label for="sheetSelect"><b>Sheet:</b></label>
     <select id="sheetSelect"></select>
 
-    <button id="reloadBtn">Reload data</button>
-
-    <button id="refreshBtn" title="Trigger refresh on your PC (optional)">Trigger Excel refresh</button>
+    <button id="reloadBtn">Reload list</button>
     <span id="status" class="muted"></span>
   </div>
 
   <div style="margin-top:10px;">
-    <b>Last updated:</b> <span id="lastUpdated">-</span>
-    <span id="meta" class="muted"></span>
+    <span class="muted">
+      Expected files under: <code>data/sheets_html/*.html</code>
+    </span>
   </div>
 
-  <table id="tbl"></table>
+  <iframe id="viewer" src=""></iframe>
 
-  <script>
-    // Optional: set to your tunnel endpoint, e.g. https://refresh.example.com/refresh
-    // If you don't use it yet, leave empty string "" and the button will be hidden.
-    const REFRESH_API_URL = "";
+<script>
+  // ====== configure this to match your repo structure ======
+  // Put your exported sheet HTML files into: <repo>/data/sheets_html/
+  const SHEETS_DIR = "data/sheets_html/";
 
-    const INDEX_URL = "data/index.json";
+  // Fill in the exported HTML file names (no folders, just filenames)
+  // Example output names from your exporter are safe_name.html
+  const SHEET_FILES = [
+    "Golds.html",
+    "Golds Colour.html",
+    "Copper.html",
+    "Copper Colour.html",
+    "Silver.html", 
+	  "Silver Colour.html", 
+	  "Diversifieds.html", 
+	  "Diversifieds Colour.html", 
+	  "PGMs.html", 
+	  "Iron Ore.html", 
+	  "Uranium.html", 
+	  "Lithium.html", 
+	  "Other.html", 
+	  "Coal.html", 
+	  "O&G.html", 
+	  "Aluminium.html"
 
-    function setStatus(msg) {
-      document.getElementById("status").innerText = msg || "";
+  ];
+
+  function setStatus(msg) {
+    document.getElementById("status").innerText = msg || "";
+  }
+
+  function populate() {
+    const sel = document.getElementById("sheetSelect");
+    sel.innerHTML = "";
+
+    if (!SHEET_FILES.length) {
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "(Fill SHEET_FILES in index.html)";
+      sel.appendChild(opt);
+      setStatus("No sheets configured in index.html.");
+      return;
     }
 
-    // Hard check: if this triggers, assets/xlsx.full.min.js didn't load
-    if (typeof XLSX === "undefined") {
-      setStatus("Error: SheetJS failed to load (XLSX undefined). Check assets/xlsx.full.min.js path.");
-      throw new Error("XLSX is not defined");
+    for (const f of SHEET_FILES) {
+      const opt = document.createElement("option");
+      opt.value = f;
+      opt.textContent = f.replace(/\.html$/i, "");
+      sel.appendChild(opt);
     }
+    setStatus("");
+  }
 
-    function escapeHtml(s) {
-      return String(s ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+  async function checkExists(url) {
+    const r = await fetch(url, { method: "HEAD", cache: "no-store" });
+    return r.ok;
+  }
 
-    function renderTable(rows) {
-      const tbl = document.getElementById("tbl");
-      tbl.innerHTML = "";
+  async function loadSelected() {
+    const sel = document.getElementById("sheetSelect");
+    const file = sel.value;
+    if (!file) return;
 
-      if (!rows || rows.length === 0) return;
+    const url = SHEETS_DIR + file;
+    setStatus("Checking file path...");
 
-      const thead = document.createElement("thead");
-      const hr = document.createElement("tr");
-      (rows[0] || []).forEach(h => {
-        const th = document.createElement("th");
-        th.innerHTML = escapeHtml(h);
-        hr.appendChild(th);
-      });
-      thead.appendChild(hr);
-      tbl.appendChild(thead);
-
-      const tbody = document.createElement("tbody");
-      rows.slice(1).forEach(r => {
-        const tr = document.createElement("tr");
-        (r || []).forEach(c => {
-          const td = document.createElement("td");
-          td.innerHTML = escapeHtml(c);
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-      tbl.appendChild(tbody);
-    }
-
-    async function fetchJson(url) {
-      const r = await fetch(url, { cache: "no-store" });
-      if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
-      return await r.json();
-    }
-
-    async function fetchText(url) {
-      const r = await fetch(url, { cache: "no-store" });
-      if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
-      return await r.text();
-    }
-
-    async function fetchArrayBuffer(url) {
-      const r = await fetch(url, { cache: "no-store" });
-      if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
-      return await r.arrayBuffer();
-    }
-
-    function parseCSV(text) {
-      // Simple CSV parser (no quoted commas).
-      const lines = text.trim().split(/\r?\n/);
-      return lines.map(line => line.split(","));
-    }
-
-    async function parseXLSX(url) {
-      const ab = await fetchArrayBuffer(url);
-      const wb = XLSX.read(ab, { type: "array" });
-
-      // each exported file is a single-sheet workbook; still safe for multi-sheet
-      const sheetName = wb.SheetNames[0];
-      const ws = wb.Sheets[sheetName];
-
-      // 2D array
-      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false });
-
-      // normalize width
-      const maxCols = rows.reduce((m, r) => Math.max(m, (r || []).length), 0);
-      return rows.map(r => {
-        const row = (r || []).map(v => (v == null ? "" : String(v)));
-        while (row.length < maxCols) row.push("");
-        return row;
-      });
-    }
-
-    async function loadIndexAndPopulateSheets() {
-      setStatus("Loading index...");
-      const index = await fetchJson(INDEX_URL);
-
-      document.getElementById("lastUpdated").innerText = index.last_updated || "-";
-      const meta = [];
-      if (typeof index.sheet_count === "number") meta.push(`${index.sheet_count} sheets`);
-      if (index.workbook) meta.push(`source: ${index.workbook}`);
-      document.getElementById("meta").innerText = meta.length ? `(${meta.join(" · ")})` : "";
-
-      const sheets = index.sheets || [];
-      const select = document.getElementById("sheetSelect");
-      select.innerHTML = "";
-
-      if (!sheets.length) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "(No sheets found)";
-        select.appendChild(opt);
-        setStatus("No sheets exported.");
-        return { index, sheets };
+    // Local verification: HEAD request should be 200
+    // Note: Some local servers may not support HEAD; in that case it falls back to loading iframe anyway.
+    try {
+      const ok = await checkExists(url);
+      if (!ok) {
+        setStatus(`Not found: ${url} (check path / filename)`);
+      } else {
+        setStatus("");
       }
-
-      for (const s of sheets) {
-        const opt = document.createElement("option");
-        opt.value = s.file; // e.g. sheets/Golds.xlsx
-        const labelParts = [s.sheet];
-        if (typeof s.rows === "number" && typeof s.cols === "number") {
-          labelParts.push(`(${s.rows}x${s.cols})`);
-        }
-        opt.textContent = labelParts.join(" ");
-        select.appendChild(opt);
-      }
-
+    } catch (e) {
+      // ignore HEAD errors on simple local servers
       setStatus("");
-      return { index, sheets };
     }
 
-    async function loadSelectedSheet() {
-      const select = document.getElementById("sheetSelect");
-      let file = select.value; // e.g. sheets/Golds.xlsx (should be xlsx after your index.json patch)
-      if (!file) return;
+    document.getElementById("viewer").src = url;
+  }
 
-      setStatus("Loading sheet...");
-      const url = "data/" + file;
+  document.getElementById("sheetSelect").addEventListener("change", loadSelected);
+  document.getElementById("reloadBtn").addEventListener("click", () => {
+    populate();
+    loadSelected();
+  });
 
-      try {
-        let rows;
-        if (file.toLowerCase().endsWith(".xlsx") || file.toLowerCase().endsWith(".xls")) {
-          rows = await parseXLSX(url);
-        } else {
-          // legacy CSV fallback if needed
-          const csvText = await fetchText(url);
-          rows = parseCSV(csvText);
-        }
-        renderTable(rows);
-        setStatus("Loaded.");
-      } catch (e) {
-        setStatus("Error: " + (e.message || e));
-      }
-    }
-
-    async function reloadAll() {
-      try {
-        const { sheets } = await loadIndexAndPopulateSheets();
-        if (sheets && sheets.length) {
-          await loadSelectedSheet();
-        }
-      } catch (e) {
-        setStatus("Error: " + (e.message || e));
-      }
-    }
-
-    async function triggerRefresh() {
-      if (!REFRESH_API_URL) return;
-      setStatus("Triggering refresh...");
-      try {
-        const r = await fetch(REFRESH_API_URL, { method: "POST" });
-        if (!r.ok) throw new Error("Refresh failed: " + r.status);
-        setStatus("Refresh triggered. Waiting then reloading...");
-
-        setTimeout(async () => {
-          await reloadAll();
-        }, 8000);
-      } catch (e) {
-        setStatus("Error: " + (e.message || e));
-      }
-    }
-
-    // Wire up UI
-    document.getElementById("sheetSelect").addEventListener("change", loadSelectedSheet);
-    document.getElementById("reloadBtn").addEventListener("click", reloadAll);
-
-    const refreshBtn = document.getElementById("refreshBtn");
-    if (!REFRESH_API_URL) {
-      refreshBtn.style.display = "none";
-    } else {
-      refreshBtn.addEventListener("click", triggerRefresh);
-    }
-
-    // Initial load
-    reloadAll();
-  </script>
+  // init
+  populate();
+  if (SHEET_FILES.length) loadSelected();
+</script>
 </body>
 </html>
