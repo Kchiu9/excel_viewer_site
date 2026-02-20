@@ -13,7 +13,11 @@
     #status { margin-left: 10px; }
     .muted { color: #666; font-size: 12px; }
   </style>
+
+  <!-- SheetJS (XLSX parser) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.20.3/dist/xlsx.full.min.js"></script>
 </head>
+
 <body>
   <h2>Excel Viewer</h2>
 
@@ -36,7 +40,6 @@
 
 <script>
   // Optional: set to your tunnel endpoint, e.g. https://refresh.example.com/refresh
-  // If you don't use it yet, leave empty string "" and the button will be hidden.
   const REFRESH_API_URL = "";
 
   const INDEX_URL = "data/index.json";
@@ -54,13 +57,6 @@
       .replaceAll("'", "&#039;");
   }
 
-  function parseCSV(text) {
-    // Simple CSV parser (no quoted commas). Good if your exported CSV has no embedded commas.
-    // If you have commas inside cells, switch export to JSON instead.
-    const lines = text.trim().split(/\r?\n/);
-    return lines.map(line => line.split(","));
-  }
-
   function renderTable(rows) {
     const tbl = document.getElementById("tbl");
     tbl.innerHTML = "";
@@ -69,7 +65,7 @@
 
     const thead = document.createElement("thead");
     const hr = document.createElement("tr");
-    rows[0].forEach(h => {
+    (rows[0] || []).forEach(h => {
       const th = document.createElement("th");
       th.innerHTML = escapeHtml(h);
       hr.appendChild(th);
@@ -80,7 +76,7 @@
     const tbody = document.createElement("tbody");
     rows.slice(1).forEach(r => {
       const tr = document.createElement("tr");
-      r.forEach(c => {
+      (r || []).forEach(c => {
         const td = document.createElement("td");
         td.innerHTML = escapeHtml(c);
         tr.appendChild(td);
@@ -100,6 +96,40 @@
     const r = await fetch(url, { cache: "no-store" });
     if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
     return await r.text();
+  }
+
+  async function fetchArrayBuffer(url) {
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error(`Failed to load ${url} (${r.status})`);
+    return await r.arrayBuffer();
+  }
+
+  function parseCSV(text) {
+    // Simple CSV parser (no quoted commas). Keep for backward compatibility.
+    const lines = text.trim().split(/\r?\n/);
+    return lines.map(line => line.split(","));
+  }
+
+  async function parseXLSX(url) {
+    const ab = await fetchArrayBuffer(url);
+    const wb = XLSX.read(ab, { type: "array" });
+
+    // Each exported file is a single-sheet workbook, but we handle multi-sheet anyway.
+    const sheetName = wb.SheetNames[0];
+    const ws = wb.Sheets[sheetName];
+
+    // Convert to 2D array; raw:false makes it render formatted text (dates, % etc.) more nicely
+    const rows = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false });
+
+    // Normalize: ensure every row has same column count (so table doesn't misalign)
+    const maxCols = rows.reduce((m, r) => Math.max(m, (r || []).length), 0);
+    const normalized = rows.map(r => {
+      const row = (r || []).map(v => v == null ? "" : String(v));
+      while (row.length < maxCols) row.push("");
+      return row;
+    });
+
+    return normalized;
   }
 
   async function loadIndexAndPopulateSheets() {
@@ -128,7 +158,7 @@
     // Populate dropdown
     for (const s of sheets) {
       const opt = document.createElement("option");
-      opt.value = s.file; // e.g. sheets/Dashboard.csv
+      opt.value = s.file; // e.g. sheets/Golds.xlsx  (or legacy sheets/Golds.csv)
       const labelParts = [s.sheet];
       if (typeof s.rows === "number" && typeof s.cols === "number") {
         labelParts.push(`(${s.rows}x${s.cols})`);
@@ -143,12 +173,22 @@
 
   async function loadSelectedSheet() {
     const select = document.getElementById("sheetSelect");
-    const file = select.value; // e.g. sheets/Dashboard.csv
+    const file = select.value; // e.g. sheets/Golds.xlsx
     if (!file) return;
 
     setStatus("Loading sheet...");
-    const csvText = await fetchText("data/" + file);
-    const rows = parseCSV(csvText);
+
+    const url = "data/" + file;
+
+    let rows;
+    if (file.toLowerCase().endsWith(".xlsx") || file.toLowerCase().endsWith(".xls")) {
+      rows = await parseXLSX(url);
+    } else {
+      // legacy CSV path
+      const csvText = await fetchText(url);
+      rows = parseCSV(csvText);
+    }
+
     renderTable(rows);
     setStatus("Loaded.");
   }
@@ -172,7 +212,6 @@
       if (!r.ok) throw new Error("Refresh failed: " + r.status);
       setStatus("Refresh triggered. Waiting then reloading...");
 
-      // give your PC time to refresh+export+push
       setTimeout(async () => {
         await reloadAll();
       }, 8000);
@@ -181,18 +220,16 @@
     }
   }
 
-  // Wire up UI
   document.getElementById("sheetSelect").addEventListener("change", loadSelectedSheet);
   document.getElementById("reloadBtn").addEventListener("click", reloadAll);
 
   const refreshBtn = document.getElementById("refreshBtn");
   if (!REFRESH_API_URL) {
-    refreshBtn.style.display = "none"; // hide if not configured
+    refreshBtn.style.display = "none";
   } else {
     refreshBtn.addEventListener("click", triggerRefresh);
   }
 
-  // Initial load
   reloadAll();
 </script>
 </body>
