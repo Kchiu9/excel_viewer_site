@@ -1,101 +1,101 @@
-{
+﻿{
   "last_updated": "2026-02-20 14:35:44",
   "workbook": "C:\\Users\\Thinkpad\\OneDrive\\0-Concordia_Capital\\excel_to_https\\excel_web_refresh\\agent\\Miners_Comps_Screener_Web.xlsx",
   "sheet_count": 16,
   "sheets": [
     {
       "sheet": "Golds",
-      "file": "sheets/Golds.csv",
+      "file": "sheets/Golds.xlsx",
       "rows": 72,
       "cols": 77
     },
     {
       "sheet": "Golds Colour",
-      "file": "sheets/Golds Colour.csv",
+      "file": "sheets/Golds Colour.xlsx",
       "rows": 65,
       "cols": 7
     },
     {
       "sheet": "Copper",
-      "file": "sheets/Copper.csv",
+      "file": "sheets/Copper.xlsx",
       "rows": 46,
       "cols": 78
     },
     {
       "sheet": "Copper Colour",
-      "file": "sheets/Copper Colour.csv",
+      "file": "sheets/Copper Colour.xlsx",
       "rows": 22,
       "cols": 8
     },
     {
       "sheet": "Silver",
-      "file": "sheets/Silver.csv",
+      "file": "sheets/Silver.xlsx",
       "rows": 18,
       "cols": 78
     },
     {
       "sheet": "Silver Colour",
-      "file": "sheets/Silver Colour.csv",
+      "file": "sheets/Silver Colour.xlsx",
       "rows": 14,
       "cols": 6
     },
     {
       "sheet": "Diversifieds",
-      "file": "sheets/Diversifieds.csv",
+      "file": "sheets/Diversifieds.xlsx",
       "rows": 11,
       "cols": 47
     },
     {
       "sheet": "Diversifieds Colour",
-      "file": "sheets/Diversifieds Colour.csv",
+      "file": "sheets/Diversifieds Colour.xlsx",
       "rows": 8,
       "cols": 5
     },
     {
       "sheet": "PGMs",
-      "file": "sheets/PGMs.csv",
+      "file": "sheets/PGMs.xlsx",
       "rows": 19,
       "cols": 42
     },
     {
       "sheet": "Iron Ore",
-      "file": "sheets/Iron Ore.csv",
+      "file": "sheets/Iron Ore.xlsx",
       "rows": 12,
       "cols": 44
     },
     {
       "sheet": "Uranium",
-      "file": "sheets/Uranium.csv",
+      "file": "sheets/Uranium.xlsx",
       "rows": 30,
       "cols": 37
     },
     {
       "sheet": "Lithium",
-      "file": "sheets/Lithium.csv",
+      "file": "sheets/Lithium.xlsx",
       "rows": 22,
       "cols": 42
     },
     {
       "sheet": "Other",
-      "file": "sheets/Other.csv",
+      "file": "sheets/Other.xlsx",
       "rows": 34,
       "cols": 32
     },
     {
       "sheet": "Coal",
-      "file": "sheets/Coal.csv",
+      "file": "sheets/Coal.xlsx",
       "rows": 25,
       "cols": 52
     },
     {
       "sheet": "O&G",
-      "file": "sheets/O&G.csv",
+      "file": "sheets/O&G.xlsx",
       "rows": 44,
       "cols": 29
     },
     {
       "sheet": "Aluminium",
-      "file": "sheets/Aluminium.csv",
+      "file": "sheets/Aluminium.xlsx",
       "rows": 14,
       "cols": 28
     }
