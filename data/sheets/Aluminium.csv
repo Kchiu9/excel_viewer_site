@@ -4,13 +4,13 @@ Ticker",Ticker,,FY2024,FY2025,FY2026,FY2024,FY2025,FY2024,FY2025,FY2026,FY2024,,
 SNL_EARNINGS_RELEASE_DATE,EXPECTED_REPORT_DT,EXPECTED_REPORT_TYP,,,,,,,,SP_PNAVPS_FWD,SP_PCFPS_FWD,,,SP_FCF_EST,SP_FCF_FWD,SP_PE_FWD,,,IQ_NET_DEBT,SP_DEBT_TO_EQUITY,SP_TEV_EBITDA_FWD,,,SP_DIV_YIELD,,,
 ,,,,,,,,,,,,,,,,,,,FQ0,FH0,,,,,,,
 ,,,,,,,North American,,,,,,,,,,,,,,,,,,,,
-#PEND,,,18/10/2024,Estimated,#PEND,#PEND,Alcoa,AA US Equity,NYSE:AA,,#PEND,#PEND,#PEND,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,,,YES
-#PEND,,,,,#PEND,#PEND,Century Aluminium,,NASDAQGS:CENX,,#PEND,#PEND,#PEND,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,,,NO
-#PEND,,,,,#PEND,#PEND,Constellium SE,,NYSE:CSTM,,#PEND,#PEND,#PEND,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,,,NO
-#PEND,,,,,#PEND,#PEND,Kaiser Aluminum,,NASDAQGS:KALU,,#PEND,#PEND,#PEND,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,,,NO
+,,,18/10/2024,Estimated,,,Alcoa,AA US Equity,NYSE:AA,,,,,,,,,,,,,,,,,,YES
+,,,,,,,Century Aluminium,,NASDAQGS:CENX,,,,,,,,,,,,,,,,,,NO
+,,,,,,,Constellium SE,,NYSE:CSTM,,,,,,,,,,,,,,,,,,NO
+,,,,,,,Kaiser Aluminum,,NASDAQGS:KALU,,,,,,,,,,,,,,,,,,NO
 ,,,,,,,,,Average,,,,,,,,,,,,,,,,,,
 ,,,,,,,Other,,,,,,,,,,,,,,,,,,,,
-#PEND,,,,,#PEND,#PEND,Norsk Hydro ,,OB:NHY,,#PEND,#PEND,#PEND,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,,,NO
-#PEND,,,,,#PEND,#PEND,Granges AB,,OM:GRNG,,#PEND,#PEND,#PEND,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,,,NO
-#PEND,,,,,#PEND,#PEND,AMAG Austria Metall,,WBAG:AMAG,,#PEND,#PEND,#PEND,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,,,NO
+,,,,,,,Norsk Hydro ,,OB:NHY,,,,,,,,,,,,,,,,,,NO
+,,,,,,,Granges AB,,OM:GRNG,,,,,,,,,,,,,,,,,,NO
+,,,,,,,AMAG Austria Metall,,WBAG:AMAG,,,,,,,,,,,,,,,,,,NO
 ,,,,,,,,,Average,,,,,,,,,,,,,,,,,,

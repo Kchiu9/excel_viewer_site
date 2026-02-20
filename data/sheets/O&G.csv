@@ -3,43 +3,43 @@ Last Earnings Date,Enterprise Value (US$),Market Cap ($US),Unnamed: 3,Unnamed: 4
 SNL_EARNINGS_RELEASE_DATE,,,,,SP_PNAVPS_FWD,SP_PCFPS_FWD,,,SP_FCF_EST,SP_FCF_FWD,,SP_PE_FWD,,,IQ_NET_DEBT,SP_DEBT_TO_EQUITY,SP_TEV_EBITDA_FWD,,,,,,,,,SNL_ATTRIBUTABLE_RESV_TONNES,SNL_ATTRIBUTABLE_M_AND_I_RESRC_TONNES,SNL_ATTRIBUTABLE_TOTAL_RESRC_TONNES
 ,,,,,,,,,,,,,,,FQ0,FH0,,,,SP_OG_AVG_DAILY_PROD_EST,,,,,,MRQ,,
 ,,,Europe,,,,,,,,,,,,,,,,,,,,,,,,,
-#PEND,#PEND,#PEND,Shell,LSE:SHEL,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,BP,LSE:BP.,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,TotalEnergies SE,NYSE:TTE,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Equinor,OB:EQNR,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Energean PLC,LSE:ENOG,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Neste Oyj,HLSE:NESTE,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
+,,,Shell,LSE:SHEL,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,BP,LSE:BP.,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,TotalEnergies SE,NYSE:TTE,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Equinor,OB:EQNR,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Energean PLC,LSE:ENOG,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Neste Oyj,HLSE:NESTE,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,Average,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,Canada,,,,,,,,,,,,,,,,,,,,,,,,,
-#PEND,#PEND,#PEND,Canadian Natural Resources,TSX:CNQ,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Suncor Energy,TSX:SU,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Imperial Oil Ltd,TSX:IMO,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Cenovus Energy Inc,TSX:CVE,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,MEG Energy Corp,TSX:MEG,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Whitecap Energy,TSX:WCP,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Enerplus Corp,TSX:ERF,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Athabasca Oil Corp,TSX:ATH,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Baytex Energy,TSX:BTE,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Birchcliff Energy,TSX:BIR,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Tamarack Valley,TSX:TVE,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,International Petroleum Corp,TSX:IPCO,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Logan Energy,TSXV:LGN,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
+,,,Canadian Natural Resources,TSX:CNQ,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Suncor Energy,TSX:SU,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Imperial Oil Ltd,TSX:IMO,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Cenovus Energy Inc,TSX:CVE,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,MEG Energy Corp,TSX:MEG,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Whitecap Energy,TSX:WCP,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Enerplus Corp,TSX:ERF,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Athabasca Oil Corp,TSX:ATH,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Baytex Energy,TSX:BTE,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Birchcliff Energy,TSX:BIR,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Tamarack Valley,TSX:TVE,,,,,,,,,,,,,,,,,,,,,,,,
+,,,International Petroleum Corp,TSX:IPCO,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Logan Energy,TSXV:LGN,,,,,,,,,,,,,,,,,,,,,,0,0,0
 ,,,,Average,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,USA,,,,,,,,,,,,,,,,,,,,,,,,,
-#PEND,#PEND,#PEND,Exxon Mobil Copr,NYSE:XOM,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Chevron Corp,NYSE:CVX,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,ConoccoPhillips,NYSE:COP,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Hess Corp,NYSE:HES,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Devon Energy Corp,NYSE:DVN,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,,,
-#PEND,#PEND,#PEND,Marathon Oil Corp,NYSE:MRO,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Murphy Oil Corp,NYSE:MUR,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Occidental Petroleum,NYSE:OXY,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,Viper Energy Inc,NASDAQGS:VNOM,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
-#PEND,#PEND,#PEND,NGL Energy Partners LP,NYSE:NGL,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
+,,,Exxon Mobil Copr,NYSE:XOM,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Chevron Corp,NYSE:CVX,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,ConoccoPhillips,NYSE:COP,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Hess Corp,NYSE:HES,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Devon Energy Corp,NYSE:DVN,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Marathon Oil Corp,NYSE:MRO,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Murphy Oil Corp,NYSE:MUR,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Occidental Petroleum,NYSE:OXY,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,Viper Energy Inc,NASDAQGS:VNOM,,,,,,,,,,,,,,,,,,,,,,0,0,0
+,,,NGL Energy Partners LP,NYSE:NGL,,,,,,,,,,,,,,,,,,,,,,0,0,0
 ,,,,Average,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,Australia,,,,,,,,,,,,,,,,,,,,,,,,,
-#PEND,#PEND,#PEND,Karoon Energy,ASX:KAR,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,#PEND,,,,0,0,0
+,,,Karoon Energy,ASX:KAR,,,,,,,,,,,,,,,,,,,,,,0,0,0
 ,,,Oil and Gas Services,,,,,,,,,,,,,,,,,,,,,,,,,
-#PEND,#PEND,#PEND,Precision Drilling,TSX:PD,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,,,,,,,,,
-#PEND,#PEND,#PEND,Secure Energy Services,TSX:SES,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,,,,,,,,,
-#PEND,#PEND,#PEND,Total Energy Services,TSX:TOT,,#PEND,#PEND,#PEND,,,,#PEND,#PEND,#PEND,,#PEND,#PEND,#PEND,#PEND,,,,,,,,,
+,,,Precision Drilling,TSX:PD,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Secure Energy Services,TSX:SES,,,,,,,,,,,,,,,,,,,,,,,,
+,,,Total Energy Services,TSX:TOT,,,,,,,,,,,,,,,,,,,,,,,,
